@@ -1,4 +1,4 @@
-insert into employee values ('John', 'B', 'Smith', 123456789, '1965-01-09', '731-Fondren-Houston-TX', 'M', 30000, 333445555, 5),
+insert into azure_company.employee values ('John', 'B', 'Smith', 123456789, '1965-01-09', '731-Fondren-Houston-TX', 'M', 30000, 333445555, 5),
 							('Franklin', 'T', 'Wong', 333445555, '1955-12-08', '638-Voss-Houston-TX', 'M', 40000, 888665555, 5),
                             ('Alicia', 'J', 'Zelaya', 999887777, '1968-01-19', '3321-Castle-Spring-TX', 'F', 25000, 987654321, 4),
                             ('Jennifer', 'S', 'Wallace', 987654321, '1941-06-20', '291-Berry-Bellaire-TX', 'F', 43000, 888665555, 4),
@@ -7,7 +7,7 @@ insert into employee values ('John', 'B', 'Smith', 123456789, '1965-01-09', '731
                             ('Ahmad', 'V', 'Jabbar', 987987987, '1969-03-29', '980-Dallas-Houston-TX', 'M', 25000, 987654321, 4),
                             ('James', 'E', 'Borg', 888665555, '1937-11-10', '450-Stone-Houston-TX', 'M', 55000, NULL, 1);
 
-insert into dependent values (333445555, 'Alice', 'F', '1986-04-05', 'Daughter'),
+insert into azure_company.dependent values (333445555, 'Alice', 'F', '1986-04-05', 'Daughter'),
 							 (333445555, 'Theodore', 'M', '1983-10-25', 'Son'),
                              (333445555, 'Joy', 'F', '1958-05-03', 'Spouse'),
                              (987654321, 'Abner', 'M', '1942-02-28', 'Spouse'),
@@ -15,17 +15,17 @@ insert into dependent values (333445555, 'Alice', 'F', '1986-04-05', 'Daughter')
                              (123456789, 'Alice', 'F', '1988-12-30', 'Daughter'),
                              (123456789, 'Elizabeth', 'F', '1967-05-05', 'Spouse');
 
-insert into departament values ('Research', 5, 333445555, '1988-05-22','1986-05-22'),
+insert into azure_company.departament values ('Research', 5, 333445555, '1988-05-22','1986-05-22'),
 							   ('Administration', 4, 987654321, '1995-01-01','1994-01-01'),
                                ('Headquarters', 1, 888665555,'1981-06-19','1980-06-19');
 
-insert into dept_locations values (1, 'Houston'),
+insert into azure_company.dept_locations values (1, 'Houston'),
 								 (4, 'Stafford'),
                                  (5, 'Bellaire'),
                                  (5, 'Sugarland'),
                                  (5, 'Houston');
 
-insert into project values ('ProductX', 1, 'Bellaire', 5),
+insert into azure_company.project values ('ProductX', 1, 'Bellaire', 5),
 						   ('ProductY', 2, 'Sugarland', 5),
 						   ('ProductZ', 3, 'Houston', 5),
                            ('Computerization', 10, 'Stafford', 4),
@@ -33,7 +33,7 @@ insert into project values ('ProductX', 1, 'Bellaire', 5),
                            ('Newbenefits', 30, 'Stafford', 4)
 ;
 
-insert into works_on values (123456789, 1, 32.5),
+insert into azure_company.works_on values (123456789, 1, 32.5),
 							(123456789, 2, 7.5),
                             (666884444, 3, 40.0),
                             (453453453, 1, 20.0),

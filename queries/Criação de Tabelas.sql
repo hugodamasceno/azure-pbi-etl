@@ -1,3 +1,9 @@
+-- Cria o esquema se não existir
+ CREATE SCHEMA IF NOT EXISTS azure_company;
+
+-- Seleciona o esquema
+ SET search_path TO azure_company;
+
 -- Tabela employee
 CREATE TABLE IF NOT EXISTS employee (
     Fname varchar(15) NOT NULL,
