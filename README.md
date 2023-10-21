@@ -78,7 +78,11 @@ A respeito das diretrizes propostas para tratamento e análises, pode-se conclui
 - Aqui é importante apontar que foi realizado mescla, onde colunas de uma tabela são adicionadas a outra, tornando o dado mais completo. A mescla se difere da combinação de dados uma vez que a mescla busca novas colunas para completar os dados, enquanto as combinação de dados leva à adição de novas linhas para o mesmo conjunto de colunas, o que é adequado em casos de construção incremental de uma base de dados. Um exemplo de combinação incremental de dados seria a adição de dados ao longo do tempo, onde cada dia é adicionado uma tabela de dados de vendas para integrar o histórico.
 - Foi utilizado o recurso de coluna calculada no Power Query a fim de mesclar as colunas relativas ao nome e sobrenome dos colaboradores, criando a coluna nome completo.
 
+<h3 align="center">DASHBOARD</h3>
+<p align="justify">É possível encontrar o dashboard neste <a href="https://app.powerbi.com/view?r=eyJrIjoiZDVkMjNmZjktMTlmZS00ZmMwLTk4MzMtZDA1MDY4OTYyOGQ4IiwidCI6IjIwYzQyZmY4LWI5NGYtNGM3ZC1iOWZkLWM1OTMwMTY1YjEyZSJ9&pageName=ReportSection5d4e26e9d78b57127c3a">LINK</p>. Fique a vontade para interagir e propor melhorias.
+
 ---
+
 <div align="center"> 
   <h3>PREVIEW</h3>
 </div>
