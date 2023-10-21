@@ -39,39 +39,51 @@ Os dados descreve detalhes de uma empresa fictícia contando com quatro tabelas 
 - localização dos departamentos (dept_location).
 
 <p align="justify"> Em primeiro momento, foi realizado uma checagem na integridade dos dados e feito padronização dos valores de identificação para o tipo texto. Os nomes das colunas e demais tipos foram mantidos de maneira a não ser inserido etapas redundantes ao longo do ETL, e assim o processo pode ser otimizado através da elaboração de processos de mudança de tipagem e nomeclatura uma única vez ao final. Desta forma garanto um código mais limpo, fácil de realizar manutenções e melhor performance.<br><br>
+    
 A tabela departamento foi duplicada, dando origem à tabela department_inactive, que teve sua carga desabilitada, e foi utilizada para realizar uma mesclagem com a tabela de colaboradores a fim de adicionar o nome dos departamentos a que cada colaborador estava vinculado.<br><br>
 A tabela de departamento foi mesclada com a tabela de localização dos departamentos, mantendo departamento a esquerda e realizando um join completo, de tal forma que o departamento que aparece em mais de uma cidade teve o número de registros aumentado para cada cidade. Desta forma, para manter uma identidade dos registros, foi criado uma coluna calculada com o valor igual à concatenação do nome do departamento à cidade em que estava localizada. A tabela de localização também teve sua carga desabilitada.<br><br>
-Na tabela de colaboradores, foi realizado uma divisão da coluna endereço entre número, rua, cidade e estado. Esta divisão permitiu que fosse criado uma coluna de concatenação entre nome do departamento do colaborador e sua cidade, resgatando vínculo entre a tabela de colaboradores e de departamento.<br><br>
+    
+Na tabela de colaboradores, foi realizado uma divisão da coluna endereço entre número, rua, cidade e estado. Esta divisão permitiu identificar a divergência entre local de moradia e trabalho dos colaboradores.<br><br>
+
 A seguir, foi calculado uma nova coluna concatenando nome e sobrenome dos colaboradores em um nome completo. Ainda na tabela de colaboradores, foi realizado uma mescla dela com ela mesma, usando os códigos dos supervisores de cada colaborador para a tabela da esquerda e relacionando com os códigos dos próprios colaboradores da tabela da direita, efetuando um left-join, o qual foi responsável por trazer nome completo dos respectivos supervisores.<br><br>
 Já na tabela de projetos, foi realizado inicialmente um left-join com a tabela department_inactive, de maneira a importar o nome do departamento em que o projeto está sendo realizado, o que permitiu a seguir, criar uma coluna calculada concatenando o nome do departamento com a cidade em que o projeto ocorre, permitindo assim usar de chave estrangeira para vincular a tabela com a tabela de departamento completa.<br><br>
-Por fim, as colunas sem mais finalidade foram excluídas, nomes trocados e tipos adequados, o que resultou num esquema snow-flake como segue:
+
+Por fim, as colunas sem mais finalidade foram excluídas, nomes trocados e tipos adequados, o que resultou num star-esquema como segue:
 </p>
+<div align="center">
+    <img height="360px" src="https://github.com/hugodamasceno/azure-pbi-etl/blob/e3e294387fd3573b3803ddf01a809e50eb5ae5cc/imagens/modelo_dados.drawio.png"/>
+</div>
+ <p align="justify"> Os termos 'CALC' sinalizam as variáveis que foram calculadas usando DAX a fim de facilitar a construção das visualizações.</p>
 
-<!--
-Verifique os cabeçalhos e tipos de dados
+---
 
-Modifique os valores monetários para o tipo double preciso
+<h3>DAS DIRETRIZES</h3>
 
-Verifique a existência dos nulos e analise a remoção
+<p>
+A respeito das diretrizes propostas para tratamento e análises, pode-se concluir o seguinte:<br>
+    </p>
+    
+1. Cabeçalhos e tipos: <br>
+- Os cabeçalhos foram identificados adequadamente pelo Power BI, restando apenas adequação das nomeclaturas, que foram todas passadas para o português por simplicidade.
+- Os tipos dos dados também foram, em geral, interpretados de forma adequada, restando apenas a padronização dos tipos de ID para TEXTO e monetário para decimal fixo. No mais, apenas as variáveis resultantes de cálculos apresentaram necessidade de serem ajustadas aos tipos convenientes.
+2. Valores nulos: <br>
+- Os valores nulos encontrados não configuravam necessidade de exclusão/remoção, pois diziam respeito a colaboradores que não estavam sob supervisão, mas que eram supervisores.
+- Foi assegurado que todos os demais colaboradores tinham supervisores, que por sua vez, estavam devidamente registrados entre os colaboradores. Em caso de atualização da base de tal forma que um colaborador seja supervisionado por um supervisor cujo código não está inserido dentre os colaboradores, os relatórios serão capazes de acusar este erro.
+3. Departamentos e gerências <br>
+- Foi averiguado que todos os departamentos possuiam gerentes, os quais estavam dentre os registros de colaboradores
+- Em caso de departamento sem gerente, os relatórios também serão capazes de acusar a falha.
+4. Tratamento de dados: <br>
+- Campos complexos, os quais apresentavam mais de um dado acumulado, foram separados, como é o caso do endereço dos colaboradores, que foram separados em estado, cidade, rua e número.
+- Ao mesclar as tabelas, foi tomado o cuidado ao perceber quando estavamos em busca de um left-join. Um exemplo de left join foi a mescla de colaboradores com departamentos, a fim de trazer o nome dos departamentos em que os colaboradores estavam alocados.
+- Aqui é importante apontar que foi realizado mescla, onde colunas de uma tabela são adicionadas a outra, tornando o dado mais completo. A mescla se difere da combinação de dados uma vez que a mescla busca novas colunas para completar os dados, enquanto as combinação de dados leva à adição de novas linhas para o mesmo conjunto de colunas, o que é adequado em casos de construção incremental de uma base de dados. Um exemplo de combinação incremental de dados seria a adição de dados ao longo do tempo, onde cada dia é adicionado uma tabela de dados de vendas para integrar o histórico.
+- Foi utilizado o recurso de coluna calculada no Power Query a fim de mesclar as colunas relativas ao nome e sobrenome dos colaboradores, criando a coluna nome completo.
 
-Os employees com nulos em Super_ssn podem ser os gerentes. Verifique se há algum colaborador sem gerente
+---
+<div align="center"> 
+  <h3>PREVIEW</h3>
+</div>
 
-Verifique se há algum departamento sem gerente
-
-Se houver departamento sem gerente, suponha que você possui os dados e preencha as lacunas
-
-Verifique o número de horas dos projetos
-
-Separar colunas complexas
-
-Mesclar consultas employee e departament para criar uma tabela employee com o nome dos departamentos associados aos colaboradores. A mescla terá como base a tabela employee. Fique atento, essa informação influencia no tipo de junção
-
-Neste processo elimine as colunas desnecessárias.
-
-Realize a junção dos colaboradores e respectivos nomes dos gerentes . Isso pode ser feito com consulta SQL ou pela mescla de tabelas com Power BI. Caso utilize SQL, especifique no README a query utilizada no processo.
-
-Mescle as colunas de Nome e Sobrenome para ter apenas uma coluna definindo os nomes dos colaboradores
-
-Mescle os nomes de departamentos e localização. Isso fará que cada combinação departamento-local seja único. Isso irá auxiliar na criação do modelo estrela em um módulo futuro.
-
-Explique por que, neste caso supracitado, podemos apenas utilizar o mesclar e não o atribuir.-->
+<div align="centre">  
+  <img width="49%" height="250px" src="https://github.com/hugodamasceno/azure-pbi-etl/blob/e3e294387fd3573b3803ddf01a809e50eb5ae5cc/imagens/slide%201.png" alt="Hugo Damasceno github stats" />
+  <img width="49%" height="250px" src="https://github.com/hugodamasceno/azure-pbi-etl/blob/e3e294387fd3573b3803ddf01a809e50eb5ae5cc/imagens/slide%203.png" style="border: 2px solid white;">
+</div>
